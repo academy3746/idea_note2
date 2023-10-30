@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:idea_note2/constants/gaps.dart';
 import 'package:idea_note2/constants/sizes.dart';
-import 'package:idea_note2/features/screens/main_screen.dart';
+import 'package:idea_note2/features/screens/main_screen/main_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   static String routeName = "/";

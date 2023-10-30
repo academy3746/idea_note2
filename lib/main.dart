@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:idea_note2/features/screens/main_screen.dart';
+import 'package:idea_note2/features/screens/main_screen/main_screen.dart';
 import 'package:idea_note2/features/screens/splash_screen.dart';
 
 void main() {
