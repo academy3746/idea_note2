@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:idea_note2/constants/sizes.dart';
+import 'package:idea_note2/data/database_helper.dart';
+import 'package:idea_note2/data/db_config.dart';
+import 'package:intl/intl.dart';
 
 class ListItems {
-  final int index;
+  final IdeaInfo ideaInfo;
+  List<IdeaInfo> lstIdeaInfo = [];
+  var dbHelper = DatabaseHelper();
 
-  ListItems(this.index);
+  ListItems(this.ideaInfo) {
+    initData();
+  }
 
   Widget listItem(int index) {
     return Container(
@@ -28,14 +35,14 @@ class ListItems {
         alignment: Alignment.centerLeft,
         children: [
           /// title
-          const Padding(
-            padding: EdgeInsets.only(
+          Padding(
+            padding: const EdgeInsets.only(
               left: Sizes.size14,
               bottom: Sizes.size16,
             ),
             child: Text(
-              "# 4차 산업혁명 시대에 개발자로 살아남기!",
-              style: TextStyle(
+              "# ${lstIdeaInfo[index].title}",
+              style: const TextStyle(
                 fontSize: Sizes.size16,
                 color: Colors.black,
               ),
@@ -51,7 +58,10 @@ class ListItems {
                 bottom: Sizes.size8,
               ),
               child: Text(
-                "2023. 10. 30 21:37",
+                DateFormat("yyyy.MM.dd HH:mm").format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                      lstIdeaInfo[index].datetime),
+                ),
                 style: TextStyle(
                   fontSize: Sizes.size10,
                   color: Colors.grey.shade400,
@@ -59,6 +69,7 @@ class ListItems {
               ),
             ),
           ),
+
           /// importance
           Padding(
             padding: const EdgeInsets.only(
@@ -68,7 +79,7 @@ class ListItems {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: RatingBar.builder(
-                initialRating: 3,
+                initialRating: lstIdeaInfo[index].importance.toDouble(),
                 minRating: 1,
                 direction: Axis.horizontal,
                 itemSize: Sizes.size16,
@@ -91,5 +102,16 @@ class ListItems {
         ],
       ),
     );
+  }
+
+  Future<void> getIdeaInfo() async {
+    // SELECT * FROM `tb_idea` where (1) ORDER BY datetime DESC
+    await dbHelper.initDatabase();
+    lstIdeaInfo = await dbHelper.getAllIdeaInfo();
+    lstIdeaInfo.sort((a, b) => b.datetime.compareTo(a.datetime));
+  }
+
+  Future<void> initData() async {
+    await getIdeaInfo();
   }
 }
