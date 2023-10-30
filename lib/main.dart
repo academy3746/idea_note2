@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:idea_note2/features/screens/main_screen.dart';
+import 'package:idea_note2/features/screens/splash_screen.dart';
 
 void main() {
   runApp(const NoteApp());
@@ -10,11 +12,19 @@ class NoteApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '아이디어노트',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primaryColor: Colors.yellowAccent,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellowAccent),
+        useMaterial3: false,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: SplashScreen.routeName,
+      routes: {
+        SplashScreen.routeName: (context) => const SplashScreen(),
+        MainScreen.routeName: (context) => const MainScreen(),
+      },
     );
   }
 }
