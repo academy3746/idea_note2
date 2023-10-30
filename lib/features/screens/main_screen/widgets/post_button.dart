@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:idea_note2/constants/sizes.dart';
 
@@ -12,6 +14,7 @@ class PostButton extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
       onPressed: () {
         // 게시글 POST
+        print("Button on Pressed!");
       },
       child: Image.asset(
         "assets/images/post.png",
