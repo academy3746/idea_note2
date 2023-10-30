@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:idea_note2/constants/sizes.dart';
 import 'package:idea_note2/features/screens/main_screen/widgets/list_item.dart';
+import 'package:idea_note2/features/screens/main_screen/widgets/post_button.dart';
 
 class MainScreen extends StatefulWidget {
   static String routeName = "/main";
@@ -41,18 +42,7 @@ class _MainScreenState extends State<MainScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
-        onPressed: () {
-          // 게시글 POST
-        },
-        child: Image.asset(
-          "assets/images/post.png",
-          width: Sizes.size28,
-          height: Sizes.size28,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: const PostButton(),
     );
   }
 }
