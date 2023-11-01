@@ -4,9 +4,7 @@ import 'package:idea_note2/constants/sizes.dart';
 import 'package:idea_note2/features/screens/edit_screen/edit_screen.dart';
 
 class PostButton extends StatelessWidget {
-  const PostButton({
-    super.key,
-  });
+  const PostButton({super.key});
 
   @override
   Widget build(BuildContext context) {

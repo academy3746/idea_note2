@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:idea_note2/constants/sizes.dart';
-import 'package:idea_note2/data/database_helper.dart';
 import 'package:idea_note2/data/db_config.dart';
 import 'package:intl/intl.dart';
 
-class ListItems {
-  final IdeaInfo ideaInfo;
-  List<IdeaInfo> lstIdeaInfo = [];
-  var dbHelper = DatabaseHelper();
+class ListItem extends StatelessWidget {
+  const ListItem({
+    super.key,
+    required this.lstIdeaInfo,
+    required this.index,
+  });
 
-  ListItems(this.ideaInfo) {
-    initData();
-  }
+  final List<IdeaInfo> lstIdeaInfo;
+  final int index;
 
-  Widget listItem(int index) {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: Sizes.size80 + Sizes.size2,
       margin: const EdgeInsets.only(
@@ -102,16 +103,5 @@ class ListItems {
         ],
       ),
     );
-  }
-
-  Future<void> getIdeaInfo() async {
-    // SELECT * FROM `tb_idea` where (1) ORDER BY datetime DESC
-    await dbHelper.initDatabase();
-    lstIdeaInfo = await dbHelper.getAllIdeaInfo();
-    lstIdeaInfo.sort((a, b) => b.datetime.compareTo(a.datetime));
-  }
-
-  Future<void> initData() async {
-    await getIdeaInfo();
   }
 }
