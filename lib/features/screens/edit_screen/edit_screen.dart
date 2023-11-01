@@ -91,39 +91,37 @@ class _EditScreenState extends State<EditScreen> {
     _contentController;
     _feedbackController;
 
-    /// Get each field's value
+    /// 게시글 수정 사항 세팅
     if (widget.ideaInfo != null) {
       _titleController.text = widget.ideaInfo!.title;
       _motiveController.text = widget.ideaInfo!.motive;
       _contentController.text = widget.ideaInfo!.content;
 
-      /// Not Required
       if (widget.ideaInfo!.feedback.isNotEmpty) {
         _feedbackController.text = widget.ideaInfo!.feedback;
       }
-    }
 
-    /// Importance Score Setting
-    _initClickStatus();
-    switch (widget.ideaInfo!.importance) {
-      case 1:
-        isClicked01 = true;
-        break;
-      case 2:
-        isClicked02 = true;
-        break;
-      case 3:
-        isClicked03 = true;
-        break;
-      case 4:
-        isClicked04 = true;
-        break;
-      case 5:
-        isClicked05 = true;
-        break;
-    }
+      _initClickStatus();
+      switch (widget.ideaInfo!.importance) {
+        case 1:
+          isClicked01 = true;
+          break;
+        case 2:
+          isClicked02 = true;
+          break;
+        case 3:
+          isClicked03 = true;
+          break;
+        case 4:
+          isClicked04 = true;
+          break;
+        case 5:
+          isClicked05 = true;
+          break;
+      }
 
-    importanceScore = widget.ideaInfo!.importance;
+      importanceScore = widget.ideaInfo!.importance;
+    }
   }
 
   @override
