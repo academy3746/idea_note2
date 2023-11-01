@@ -22,7 +22,7 @@ class IdeaInfo {
   /// ToMap
   /// <form method="post" action="">
   ///   <input type="hidden" value="">
-  ///  </form>
+  /// </form>
   Map<String, dynamic> toMap() {
     return {
       "id": id,
@@ -38,7 +38,7 @@ class IdeaInfo {
   /// FromMap
   /// print_r($_POST)
   /// $instance = $_POST["key"]
-  factory IdeaInfo.formMap(Map<String, dynamic> map) {
+  factory IdeaInfo.fromMap(Map<String, dynamic> map) {
     return IdeaInfo(
       id: map["id"],
       title: map["title"],

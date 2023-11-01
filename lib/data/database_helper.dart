@@ -38,7 +38,7 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> result = await database.query("tb_idea");
 
     return List.generate(result.length, (index) {
-      return IdeaInfo.formMap(result[index]);
+      return IdeaInfo.fromMap(result[index]);
     });
   }
 

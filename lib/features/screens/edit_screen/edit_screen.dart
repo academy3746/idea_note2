@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:idea_note2/constants/gaps.dart';
 import 'package:idea_note2/constants/sizes.dart';
+import 'package:idea_note2/data/database_helper.dart';
 import 'package:idea_note2/data/db_config.dart';
+import 'package:idea_note2/features/screens/edit_screen/widgets/confirm_button.dart';
 import 'package:idea_note2/features/screens/edit_screen/widgets/importance_button.dart';
 import 'package:idea_note2/features/screens/edit_screen/widgets/text_field_controller.dart';
 
@@ -21,16 +23,16 @@ class EditScreen extends StatefulWidget {
 }
 
 class _EditScreenState extends State<EditScreen> {
-  /// 제목 입력 필드
+  /// 아이디어 제목 입력 필드
   final TextEditingController _titleController = TextEditingController();
 
-  /// 동기 입력 필드
+  /// 아이디어 동기 입력 필드
   final TextEditingController _motiveController = TextEditingController();
 
-  /// 내용 입력 필드
+  /// 아이디어 내용 입력 필드
   final TextEditingController _contentController = TextEditingController();
 
-  /// 피드백 입력 필드
+  /// 유저 피드백 입력 필드
   final TextEditingController _feedbackController = TextEditingController();
 
   /// Importance Statement (Debug)
@@ -41,20 +43,70 @@ class _EditScreenState extends State<EditScreen> {
   bool isClicked05 = false;
   int importanceScore = 3;
 
+  /// Database Handling
+  final dbHelper = DatabaseHelper();
+
+  /// 뒤로가기 Action
   void _onBack() {
     Navigator.pop(context);
   }
 
+  /// 화면 터치, 키보드 비활성화
   void _keyBoardUnFocus() {
     FocusScope.of(context).unfocus();
   }
 
+  /// 중요도 점수 선택값 (Boolean) 초기화
   void _initClickStatus() {
     isClicked01 = false;
     isClicked02 = false;
     isClicked03 = false;
     isClicked04 = false;
     isClicked05 = false;
+  }
+
+  Future<void> _editComplete() async {
+    /// 1. Prepare to insert data
+    String titleValue = _titleController.text.toString();
+    String motiveValue = _motiveController.text.toString();
+    String contentValue = _contentController.text.toString();
+    String feedbackValue = _feedbackController.text.toString();
+
+    /// 2. Validation
+    if (titleValue.isEmpty || motiveValue.isEmpty || contentValue.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("반드시 작성해 주세요!"),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
+    /// 3. INSERT or UPDATE data to server
+    ///   ideaInfo == null ? "작성하기" : "수정하기"
+    if (widget.ideaInfo == null) {
+      /// INSERT
+      var ideaInfo = IdeaInfo(
+        title: titleValue,
+        motive: motiveValue,
+        content: contentValue,
+        importance: importanceScore,
+        feedback: feedbackValue.isNotEmpty ? feedbackValue : "",
+        datetime: DateTime.now().millisecondsSinceEpoch,
+      );
+
+      await _setInsertIdeaInfo(ideaInfo);
+      if (mounted) {
+        /// 작성완료 후 이전 화면으로 Direction
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  Future<void> _setInsertIdeaInfo(IdeaInfo ideaInfo) async {
+    await dbHelper.initDatabase();
+    await dbHelper.insertIdeaInfo(ideaInfo);
   }
 
   @override
@@ -112,7 +164,12 @@ class _EditScreenState extends State<EditScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// title
-                const Text("제목"),
+                const Text(
+                  "제목",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 TextFieldController(
                   height: Sizes.size42,
                   vertical: 0,
@@ -124,7 +181,12 @@ class _EditScreenState extends State<EditScreen> {
                 Gaps.v24,
 
                 /// motive
-                const Text("아이디어를 떠올린 계기"),
+                const Text(
+                  "아이디어를 떠올린 계기",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 TextFieldController(
                   height: Sizes.size42,
                   vertical: 0,
@@ -136,7 +198,12 @@ class _EditScreenState extends State<EditScreen> {
                 Gaps.v24,
 
                 /// content
-                const Text("아이디어 내용"),
+                const Text(
+                  "아이디어 내용",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 TextFieldController(
                   controller: _contentController,
                   vertical: Sizes.size20,
@@ -148,7 +215,12 @@ class _EditScreenState extends State<EditScreen> {
                 Gaps.v24,
 
                 /// importance
-                const Text("아이디어 중요도 점수"),
+                const Text(
+                  "아이디어 중요도 점수",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -236,7 +308,14 @@ class _EditScreenState extends State<EditScreen> {
                   maxLines: 5,
                   maxLength: 500,
                 ),
-                Gaps.v24,
+
+                /// 작성 완료 버튼
+                GestureDetector(
+                  onTap: _editComplete,
+                  child: const ConfirmButton(
+                    text: "작성완료",
+                  ),
+                ),
               ],
             ),
           ),
