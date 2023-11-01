@@ -5,6 +5,7 @@ import 'package:idea_note2/data/database_helper.dart';
 import 'package:idea_note2/data/db_config.dart';
 import 'package:idea_note2/features/screens/edit_screen/widgets/confirm_button.dart';
 import 'package:idea_note2/features/screens/edit_screen/widgets/importance_button.dart';
+import 'package:idea_note2/features/screens/edit_screen/widgets/post_handler.dart';
 import 'package:idea_note2/features/screens/edit_screen/widgets/text_field_controller.dart';
 
 //ignore: must_be_immutable
@@ -66,47 +67,18 @@ class _EditScreenState extends State<EditScreen> {
   }
 
   Future<void> _editComplete() async {
-    /// 1. Prepare to insert data
-    String titleValue = _titleController.text.toString();
-    String motiveValue = _motiveController.text.toString();
-    String contentValue = _contentController.text.toString();
-    String feedbackValue = _feedbackController.text.toString();
+    PostHandler postHandler = PostHandler(
+      context: context,
+      titleValue: _titleController.text.toString(),
+      motiveValue: _motiveController.text.toString(),
+      contentValue: _contentController.text.toString(),
+      feedbackValue: _feedbackController.text.toString(),
+      importanceScore: importanceScore,
+      dbHelper: dbHelper,
+      ideaInfo: widget.ideaInfo,
+    );
 
-    /// 2. Validation
-    if (titleValue.isEmpty || motiveValue.isEmpty || contentValue.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("반드시 작성해 주세요!"),
-          duration: Duration(seconds: 3),
-        ),
-      );
-      return;
-    }
-
-    /// 3. INSERT or UPDATE data to server
-    ///   ideaInfo == null ? "작성하기" : "수정하기"
-    if (widget.ideaInfo == null) {
-      /// INSERT
-      var ideaInfo = IdeaInfo(
-        title: titleValue,
-        motive: motiveValue,
-        content: contentValue,
-        importance: importanceScore,
-        feedback: feedbackValue.isNotEmpty ? feedbackValue : "",
-        datetime: DateTime.now().millisecondsSinceEpoch,
-      );
-
-      await _setInsertIdeaInfo(ideaInfo);
-      if (mounted) {
-        /// 작성완료 후 이전 화면으로 Direction
-        Navigator.pop(context);
-      }
-    }
-  }
-
-  Future<void> _setInsertIdeaInfo(IdeaInfo ideaInfo) async {
-    await dbHelper.initDatabase();
-    await dbHelper.insertIdeaInfo(ideaInfo);
+    postHandler.databaseHandler();
   }
 
   @override
