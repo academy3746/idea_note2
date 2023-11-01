@@ -1,12 +1,12 @@
 class IdeaInfo {
   /// Instance
-  int? id; // PK (AUTO INCREMENT: Index of table)
-  String title;
-  String motive;
-  String content;
-  int importance;
-  String feedback;
-  int datetime;
+  int? id; // AUTO INCREMENT
+  String title; // 아이디어 제목
+  String motive; // 아이디어 동기
+  String content; // 아이디어 내용
+  int importance; // 아이디어 중요도 점수
+  String feedback; // 유저 피드백
+  int datetime; // 게시글 작성 시간
 
   /// Constructor
   IdeaInfo({
@@ -20,6 +20,9 @@ class IdeaInfo {
   });
 
   /// ToMap
+  /// <form method="post" action="">
+  ///   <input type="hidden" value="">
+  ///  </form>
   Map<String, dynamic> toMap() {
     return {
       "id": id,
@@ -33,6 +36,8 @@ class IdeaInfo {
   }
 
   /// FromMap
+  /// print_r($_POST)
+  /// $instance = $_POST["key"]
   factory IdeaInfo.formMap(Map<String, dynamic> map) {
     return IdeaInfo(
       id: map["id"],
