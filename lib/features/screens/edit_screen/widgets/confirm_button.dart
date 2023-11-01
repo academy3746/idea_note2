@@ -3,18 +3,17 @@ import 'package:idea_note2/constants/sizes.dart';
 
 class ConfirmButton extends StatelessWidget {
   final String text;
+  final EdgeInsetsGeometry? margin;
 
   const ConfirmButton({
     super.key,
-    required this.text,
+    required this.text, this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(
-        top: Sizes.size24,
-      ),
+      margin: margin,
       height: Sizes.size64,
       alignment: Alignment.center,
       decoration: ShapeDecoration(

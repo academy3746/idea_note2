@@ -90,6 +90,40 @@ class _EditScreenState extends State<EditScreen> {
     _motiveController;
     _contentController;
     _feedbackController;
+
+    /// Get each field's value
+    if (widget.ideaInfo != null) {
+      _titleController.text = widget.ideaInfo!.title;
+      _motiveController.text = widget.ideaInfo!.motive;
+      _contentController.text = widget.ideaInfo!.content;
+
+      /// Not Required
+      if (widget.ideaInfo!.feedback.isNotEmpty) {
+        _feedbackController.text = widget.ideaInfo!.feedback;
+      }
+    }
+
+    /// Importance Score Setting
+    _initClickStatus();
+    switch (widget.ideaInfo!.importance) {
+      case 1:
+        isClicked01 = true;
+        break;
+      case 2:
+        isClicked02 = true;
+        break;
+      case 3:
+        isClicked03 = true;
+        break;
+      case 4:
+        isClicked04 = true;
+        break;
+      case 5:
+        isClicked05 = true;
+        break;
+    }
+
+    importanceScore = widget.ideaInfo!.importance;
   }
 
   @override
@@ -117,9 +151,9 @@ class _EditScreenState extends State<EditScreen> {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text(
-          "새 아이디어 작성하기",
-          style: TextStyle(
+        title: Text(
+          widget.ideaInfo == null ?  "새 아이디어 작성하기" : "아이디어 수정하기",
+          style: const TextStyle(
             color: Colors.black,
             fontSize: Sizes.size16,
           ),
@@ -287,6 +321,9 @@ class _EditScreenState extends State<EditScreen> {
                   onTap: _editComplete,
                   child: const ConfirmButton(
                     text: "작성완료",
+                    margin: EdgeInsets.only(
+                      top: Sizes.size24,
+                    ),
                   ),
                 ),
               ],
