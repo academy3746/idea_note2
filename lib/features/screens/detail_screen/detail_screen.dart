@@ -67,7 +67,7 @@ class DetailScreen extends StatelessWidget {
                             await _setDeleteIdeaInfo(ideaInfo!.id!);
                             if (context.mounted) {
                               Navigator.of(context).pop();
-                              Navigator.pop(context);
+                              Navigator.pop(context, "delete");
                             }
                           },
                           child: const Text(
@@ -204,12 +204,18 @@ class DetailScreen extends StatelessWidget {
 
           /// Edit Button
           GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(
+            onTap: () async {
+              var result = await Navigator.pushNamed(
                 context,
                 EditScreen.routeName,
                 arguments: ideaInfo,
               );
+
+              if (result != null) {
+                if (context.mounted) {
+                  Navigator.pop(context, "update");
+                }
+              }
             },
             child: const ConfirmButton(
               text: "수정하기",

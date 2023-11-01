@@ -79,7 +79,8 @@ class _EditScreenState extends State<EditScreen> {
       ideaInfo: widget.ideaInfo,
     );
 
-    postHandler.databaseHandler();
+    await postHandler.databaseHandler();
+    //await postHandler.setUpdateIdeaInfo(widget.ideaInfo!);
   }
 
   @override
@@ -317,9 +318,9 @@ class _EditScreenState extends State<EditScreen> {
                 /// 작성 완료 버튼
                 GestureDetector(
                   onTap: _editComplete,
-                  child: const ConfirmButton(
-                    text: "작성완료",
-                    margin: EdgeInsets.only(
+                  child: ConfirmButton(
+                    text: widget.ideaInfo == null ? "작성완료" : "수정완료",
+                    margin: const EdgeInsets.only(
                       top: Sizes.size24,
                     ),
                   ),

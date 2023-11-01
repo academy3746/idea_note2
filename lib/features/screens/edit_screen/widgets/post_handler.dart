@@ -35,6 +35,7 @@ class PostHandler {
     }
 
     if (ideaInfo == null) {
+      /// 새 게시물 작성
       var ideaInfo = IdeaInfo(
         title: titleValue,
         motive: motiveValue,
@@ -48,7 +49,22 @@ class PostHandler {
 
       if (context.mounted) {
         /// 작성완료 후 이전 화면으로 Direction
-        Navigator.pop(context);
+        Navigator.pop(context, "insert");
+      }
+    } else if (ideaInfo != null) {
+      /// 기존 게시물 수정
+      var ideaInfoModify = ideaInfo;
+      ideaInfoModify?.title = titleValue;
+      ideaInfoModify?.motive = motiveValue;
+      ideaInfoModify?.content = contentValue;
+      ideaInfoModify?.importance = importanceScore;
+      ideaInfoModify?.feedback = feedbackValue.isNotEmpty ? feedbackValue : "";
+
+      await setUpdateIdeaInfo(ideaInfoModify!);
+
+      /// Close current Edit Screen
+      if (context.mounted) {
+        Navigator.pop(context, "update");
       }
     }
   }
@@ -56,5 +72,10 @@ class PostHandler {
   Future<void> setInsertIdeaInfo(IdeaInfo ideaInfo) async {
     await dbHelper.initDatabase();
     await dbHelper.insertIdeaInfo(ideaInfo);
+  }
+
+  Future<void> setUpdateIdeaInfo(IdeaInfo ideaInfo) async {
+    await dbHelper.initDatabase();
+    await dbHelper.updateIdeaInfo(ideaInfo);
   }
 }
