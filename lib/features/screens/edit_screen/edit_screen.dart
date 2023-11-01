@@ -80,7 +80,6 @@ class _EditScreenState extends State<EditScreen> {
     );
 
     await postHandler.databaseHandler();
-    //await postHandler.setUpdateIdeaInfo(widget.ideaInfo!);
   }
 
   @override
