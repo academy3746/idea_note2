@@ -36,7 +36,7 @@ class _EditScreenState extends State<EditScreen> {
   /// 유저 피드백 입력 필드
   final TextEditingController _feedbackController = TextEditingController();
 
-  /// Importance Statement (Debug)
+  /// Importance Statement
   bool isClicked01 = false;
   bool isClicked02 = false;
   bool isClicked03 = true;
@@ -66,6 +66,7 @@ class _EditScreenState extends State<EditScreen> {
     isClicked05 = false;
   }
 
+  /// Import Database Handling Class
   Future<void> _editComplete() async {
     PostHandler postHandler = PostHandler(
       context: context,
